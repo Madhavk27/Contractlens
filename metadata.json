@@ -1,0 +1,6 @@
+{
+  "name": "ContractLens",
+  "description": "From contract to action. AI-powered contract intelligence workspace that reads business contracts, identifies obligations and deadlines, highlights clauses requiring attention, answers questions using evidence, and compares contract versions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

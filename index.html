@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#07080F]">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ContractLens — AI Contract Intelligence Workspace</title>
+  <meta name="description" content="AI-powered contract intelligence workspace that reads business contracts, identifies obligations and deadlines, highlights clauses requiring attention, answers questions using evidence, and compares contract versions." />
+  <meta property="og:title" content="ContractLens — AI Contract Intelligence Workspace" />
+  <meta property="og:description" content="AI-powered contract intelligence workspace that reads business contracts, identifies obligations and deadlines, highlights clauses requiring attention, answers questions using evidence, and compares contract versions." />
+
+  <script>
+    // Specifically catch and suppress non-fatal Vite development server WebSocket connection failures,
+    // preventing them from interfering with the main application boot sequence in containerized iframe environments.
+    function isViteWebSocketError(errorOrMessage) {
+      if (!errorOrMessage) return false;
+      var str = '';
+      if (typeof errorOrMessage === 'string') {
+        str = errorOrMessage;
+      } else if (errorOrMessage.message || errorOrMessage.stack) {
+        str = (errorOrMessage.message || '') + ' ' + (errorOrMessage.stack || '');
+      } else {
+        str = String(errorOrMessage);
+      }
+      return (
+        str.indexOf('WebSocket') !== -1 ||
+        str.indexOf('websocket') !== -1 ||
+        str.indexOf('failed to connect to websocket') !== -1 ||
+        str.indexOf('@vite/client') !== -1
+      );
+    }
+
+    // Global unhandled rejection handler
+    window.addEventListener('unhandledrejection', function (event) {
+      if (isViteWebSocketError(event.reason)) {
+        event.preventDefault();
+        event.stopImmediatePropagation && event.stopImmediatePropagation();
+        console.debug('[ContractLens:Boot] Suppressed non-fatal Vite HMR WebSocket rejection.');
+      }
+    });
+
+    // Global onerror handler
+    window.onerror = function (message, source, lineno, colno, error) {
+      if (
+        isViteWebSocketError(message) ||
+        isViteWebSocketError(error) ||
+        (source && source.indexOf('@vite/client') !== -1)
+      ) {
+        console.debug('[ContractLens:Boot] Suppressed non-fatal Vite development server WebSocket error.');
+        return true; // Suppresses browser error modal/bubbling
+      }
+      return false;
+    };
+  </script>
+
+  <!-- Fonts: Inter & Newsreader/JetBrains for contract intelligence -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="h-full bg-[#07080F] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
+  <div id="root" class="h-full"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

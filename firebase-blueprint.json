@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile and authentication identity record",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique identifier of the user" },
+        "email": { "type": "string", "format": "email", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Display name of the user" },
+        "photoURL": { "type": "string", "description": "Avatar photo URL" },
+        "createdAt": { "type": "string", "description": "Account creation timestamp" },
+        "updatedAt": { "type": "string", "description": "Last profile update timestamp" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Contract": {
+      "title": "Contract",
+      "description": "User-owned legal contract document and structured metadata",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique contract ID" },
+        "ownerUid": { "type": "string", "description": "Firebase UID of the owning user" },
+        "title": { "type": "string", "description": "Contract title or document name" },
+        "fileName": { "type": "string", "description": "Original file name" },
+        "fileFormat": { "type": "string", "enum": ["pdf", "docx"], "description": "Document format" },
+        "storagePath": { "type": "string", "description": "Private Firebase Storage path" },
+        "status": { "type": "string", "enum": ["Active", "Renewal Soon", "In Review"], "description": "Current contract operational status" },
+        "effectiveDate": { "type": "string", "description": "Effective start date" },
+        "expirationDate": { "type": "string", "description": "Expiration date" },
+        "pagesCount": { "type": "number", "description": "Total pages in contract" },
+        "obligationsCount": { "type": "number", "description": "Number of tracked obligations" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "description": "Update timestamp" }
+      },
+      "required": ["id", "ownerUid", "title", "createdAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Immutable audit record of contract operations and compliance actions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique log entry ID" },
+        "contractId": { "type": "string", "description": "Associated contract ID" },
+        "userUid": { "type": "string", "description": "UID of the user performing the action" },
+        "userEmail": { "type": "string", "description": "Email of user performing the action" },
+        "action": { "type": "string", "description": "Descriptive action identifier" },
+        "details": { "type": "string", "description": "Details or context of the logged action" },
+        "timestamp": { "type": "string", "description": "ISO timestamp of event" }
+      },
+      "required": ["id", "contractId", "userUid", "action", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Authenticated user profile documents accessible only to the owner"
+    },
+    "/contracts/{contractId}": {
+      "schema": "Contract",
+      "description": "Private user contracts accessible only to the owner"
+    },
+    "/contracts/{contractId}/auditLogs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Audit trail records associated with a contract"
+    }
+  }
+}

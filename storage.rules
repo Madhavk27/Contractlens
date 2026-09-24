@@ -1,0 +1,13 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Only the authenticated contract owner has access to their contract files
+    match /contracts/{uid}/{contractId}/{allPaths=**} {
+      allow read, write, delete: if request.auth != null && request.auth.uid == uid;
+    }
+    // Deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
